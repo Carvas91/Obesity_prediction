@@ -3,6 +3,7 @@ import pickle
 import pandas as pd
 import joblib  # To load the label encoders
 from data_model import ObesityData
+import os
 
 app = FastAPI(
     title='Obesity Level Prediction',
@@ -10,13 +11,15 @@ app = FastAPI(
 )
 
 # Load the trained model
-with open('model.pkl', 'rb') as file:
+# Load the trained model
+with open(os.path.join(os.path.dirname(__file__), 'model.pkl'), 'rb') as file:
     model = pickle.load(file)
 
 # Load the pre-trained label encoders
-caec_encoder = joblib.load('/CAEC_label_encoder.pkl')
-calc_encoder = joblib.load('/CALC_label_encoder.pkl')
-mtrans_encoder = joblib.load('/MTRANS_label_encoder.pkl')
+caec_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'CAEC_label_encoder.pkl'))
+calc_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'CALC_label_encoder.pkl'))
+mtrans_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'MTRANS_label_encoder.pkl'))
+
 
 @app.get("/")
 def index():
