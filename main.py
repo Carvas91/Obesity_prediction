@@ -14,9 +14,9 @@ with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Load the pre-trained label encoders
-caec_encoder = joblib.load('../CAEC_label_encoder.pkl')
-calc_encoder = joblib.load('../CALC_label_encoder.pkl')
-mtrans_encoder = joblib.load('../MTRANS_label_encoder.pkl')
+caec_encoder = joblib.load('/CAEC_label_encoder.pkl')
+calc_encoder = joblib.load('/CALC_label_encoder.pkl')
+mtrans_encoder = joblib.load('/MTRANS_label_encoder.pkl')
 
 @app.get("/")
 def index():
