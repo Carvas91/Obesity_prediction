@@ -10,7 +10,7 @@ app = FastAPI(
 )
 
 # Load the trained model
-with open(r'C:\Users\carva\OneDrive\Desktop\Obesity_level_MLOps\model.pkl', 'rb') as file:
+with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Load the pre-trained label encoders
