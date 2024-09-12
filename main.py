@@ -1,50 +1,70 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 import pickle
 import pandas as pd
 import joblib  # To load the label encoders
 from data_model import ObesityData
-import os
 
 app = FastAPI(
     title='Obesity Level Prediction',
     description='Classification problem'
 )
 
+# Set up the templates directory
+templates = Jinja2Templates(directory="templates")
+
 # Load the trained model
-# Load the trained model
-with open(os.path.join(os.path.dirname(__file__), 'model.pkl'), 'rb') as file:
+with open(r'C:\Users\carva\OneDrive\Desktop\Obesity_level_MLOps\model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Load the pre-trained label encoders
-caec_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'CAEC_label_encoder.pkl'))
-calc_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'CALC_label_encoder.pkl'))
-mtrans_encoder = joblib.load(os.path.join(os.path.dirname(__file__), 'MTRANS_label_encoder.pkl'))
+caec_encoder = joblib.load('../CAEC_label_encoder.pkl')
+calc_encoder = joblib.load('../CALC_label_encoder.pkl')
+mtrans_encoder = joblib.load('../MTRANS_label_encoder.pkl')
 
 
-@app.get("/")
-def index():
-    return 'Welcome to the obesity prediction app'
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    # Render the HTML form (form.html)
+    return templates.TemplateResponse('form.html', {"request": request})
 
-@app.post('/predict')
-def model_predict(data: ObesityData):
-    # Convert the input Pydantic model data into a dictionary and then into a pandas DataFrame
+
+@app.post('/predict', response_class=HTMLResponse)
+async def model_predict(request: Request,
+                        Gender: str = Form(...),
+                        Age: float = Form(...),
+                        Height: float = Form(...),
+                        family_history_with_overweight: str = Form(...),
+                        FAVC: str = Form(...),
+                        FCVC: int = Form(...),
+                        NCP: float = Form(...),
+                        CAEC: str = Form(...),
+                        SMOKE: str = Form(...),
+                        CH2O: float = Form(...),
+                        SCC: str = Form(...),
+                        FAF: float = Form(...),
+                        TUE: float = Form(...),
+                        CALC: str = Form(...),
+                        MTRANS: str = Form(...)):
+    
+    # Collect the data into a DataFrame
     sample = pd.DataFrame({
-        'Gender': [data.Gender],
-        'Age': [data.Age],
-        'Height': [data.Height],
-        #'Weight': [data.Weight],
-        'family_history_with_overweight': [data.family_history_with_overweight],
-        'FAVC': [data.FAVC],
-        'FCVC': [data.FCVC],
-        'NCP': [data.NCP],
-        'CAEC': [data.CAEC],
-        'SMOKE': [data.SMOKE],
-        'CH2O': [data.CH2O],
-        'SCC': [data.SCC],
-        'FAF': [data.FAF],
-        'TUE': [data.TUE],
-        'CALC': [data.CALC],
-        'MTRANS': [data.MTRANS]
+        'Gender': [Gender],
+        'Age': [Age],
+        'Height': [Height],
+        'family_history_with_overweight': [family_history_with_overweight],
+        'FAVC': [FAVC],
+        'FCVC': [FCVC],
+        'NCP': [NCP],
+        'CAEC': [CAEC],
+        'SMOKE': [SMOKE],
+        'CH2O': [CH2O],
+        'SCC': [SCC],
+        'FAF': [FAF],
+        'TUE': [TUE],
+        'CALC': [CALC],
+        'MTRANS': [MTRANS]
     })
 
     # Preprocess binary features manually
@@ -59,11 +79,11 @@ def model_predict(data: ObesityData):
     sample['CALC'] = calc_encoder.transform(sample['CALC'])
     sample['MTRANS'] = mtrans_encoder.transform(sample['MTRANS'])
 
-    # Debug: print the processed sample to ensure it's correct
-    print(sample)
-
     # Perform prediction with the pre-trained model
     predicted_value = model.predict(sample)
 
-    # Return the prediction result
-    return {"prediction": predicted_value[0]}
+    # Return the prediction result to be shown on the web page
+    return templates.TemplateResponse("form.html", {
+        "request": request,
+        "result": predicted_value[0]
+    })
