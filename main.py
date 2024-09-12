@@ -15,7 +15,7 @@ app = FastAPI(
 templates = Jinja2Templates(directory="templates")
 
 # Load the trained model
-with open('/model.pkl', 'rb') as file:
+with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Load the pre-trained label encoders
