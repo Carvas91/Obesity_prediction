@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obesity Level Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            padding: 40px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type=text], input[type=number], select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+        label {
+            font-weight: bold;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Obesity Level Predictor</h1>
+    <form action="/predict" method="post">
+        <div class="tooltip">
+            <label for="gender">Gender</label>
+            <span class="tooltiptext">Select Male or Female</span>
+            <select id="gender" name="Gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="age">Age</label>
+            <span class="tooltiptext">Enter your age in years</span>
+            <input type="number" id="age" name="Age" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="height">Height</label>
+            <span class="tooltiptext">Enter your height in cm</span>
+            <input type="number" id="height" name="Height" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="family_history">Family History with Overweight</label>
+            <span class="tooltiptext">Do you have a family history of overweight? (yes/no)</span>
+            <select id="family_history" name="family_history_with_overweight" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="favc">Frequent Consumption of High-Caloric Food (FAVC)</label>
+            <span class="tooltiptext">Do you frequently consume high-caloric food? (yes/no)</span>
+            <select id="favc" name="FAVC" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="fcvc">Frequency of Vegetable Consumption (FCVC)</label>
+            <span class="tooltiptext">Enter how frequently you consume vegetables (times per day)</span>
+            <input type="number" id="fcvc" name="FCVC" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="ncp">Number of Main Meals per Day (NCP)</label>
+            <span class="tooltiptext">How many main meals do you consume per day?</span>
+            <input type="number" id="ncp" name="NCP" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="caec">Consumption of Food Between Meals (CAEC)</label>
+            <span class="tooltiptext">Do you consume food between meals? (Sometimes, Frequently, Always)</span>
+            <select id="caec" name="CAEC" required>
+                <option value="Sometimes">Sometimes</option>
+                <option value="Frequently">Frequently</option>
+                <option value="Always">Always</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="smoke">Do You Smoke? (SMOKE)</label>
+            <span class="tooltiptext">Do you smoke? (yes/no)</span>
+            <select id="smoke" name="SMOKE" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="ch2o">Daily Water Consumption (CH2O)</label>
+            <span class="tooltiptext">Enter your daily water consumption in liters</span>
+            <input type="number" id="ch2o" name="CH2O" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="scc">Monitors Caloric Consumption (SCC)</label>
+            <span class="tooltiptext">Do you monitor your caloric consumption? (yes/no)</span>
+            <select id="scc" name="SCC" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="faf">Physical Activity Frequency (FAF)</label>
+            <span class="tooltiptext">How frequently do you engage in physical activity (times per week)?</span>
+            <input type="number" id="faf" name="FAF" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="tue">Time Spent on Technology (TUE)</label>
+            <span class="tooltiptext">Enter the time spent on technology (hours per day)</span>
+            <input type="number" id="tue" name="TUE" required>
+        </div>
+
+        <div class="tooltip">
+            <label for="calc">Alcohol Consumption Frequency (CALC)</label>
+            <span class="tooltiptext">How frequently do you consume alcohol? (Sometimes, Frequently, Always)</span>
+            <select id="calc" name="CALC" required>
+                <option value="Sometimes">Sometimes</option>
+                <option value="Frequently">Frequently</option>
+                <option value="Always">Always</option>
+            </select>
+        </div>
+
+        <div class="tooltip">
+            <label for="mtrans">Mode of Transportation (MTRANS)</label>
+            <span class="tooltiptext">What is your mode of transportation? (Walking, Automobile, Public Transportation)</span>
+            <select id="mtrans" name="MTRANS" required>
+                <option value="Walking">Walking</option>
+                <option value="Automobile">Automobile</option>
+                <option value="Public_Transportation">Public Transportation</option>
+            </select>
+        </div>
+
+        <input type="submit" value="Predict Obesity Level">
+    </form>
+
+    {% if result is not none %}
+    <h3 style="color: green;">Prediction Result: {{ result }}</h3>
+    {% endif %}
+
+
+</body>
+</html>
