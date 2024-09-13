@@ -109,7 +109,7 @@ To deploy the application on Render, Heroku, or any cloud service, follow these 
 
 2. **Prediction Result**:
 
-   ![Prediction Result](screenshot2.jpg)
+   ![Prediction Result](images/Obesity_pred.png)
 
 ## Future Improvements
 
