@@ -105,7 +105,7 @@ To deploy the application on Render, Heroku, or any cloud service, follow these 
 
 1. **Main Form**:
 
-   ![Obesity Level Predictor Form](screenshot.jpg)
+   ![Obesity Level Predictor Form](/images/obesity.npg)
 
 2. **Prediction Result**:
 
