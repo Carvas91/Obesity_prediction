@@ -101,6 +101,10 @@ To deploy the application on Render, Heroku, or any cloud service, follow these 
 - The model used is a **Random Forest Classifier**, trained on a dataset containing lifestyle and personal health information.
 - Pre-processing was done to encode categorical variables like `CAEC`, `CALC`, `MTRANS` using label encoders.
 
+## The data set
+- Here's the dataset source: [Estimation of Obesity Levels Based On Eating Habits and Physical Condition](https://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition)
+
+
 ## Screenshots
 
 1. **Main Form**:
